@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Tooman | 8 March</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background: #000000;
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+            overflow-x: hidden;
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('toom_b.png');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            opacity: 0.2;
+            pointer-events: none;
+            z-index: 0;
+            transition: transform 0.3s ease, filter 0.3s ease;
+        }
+
+        body.glow-effect::before {
+            filter: brightness(1.2) drop-shadow(0 0 10px #00ffff);
+            transform: scale(1.02);
+        }
+
+        .animated-lines {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+            overflow: hidden;
+        }
+
+        .line {
+            position: absolute;
+            width: 2px;
+            height: 100%;
+            background: linear-gradient(180deg, transparent, #00ffff, transparent);
+            opacity: 0.3;
+            animation: moveLine 8s linear infinite;
+        }
+
+        @keyframes moveLine {
+            0% { transform: translateY(-100%); }
+            100% { transform: translateY(100%); }
+        }
+
+        .mouse-glow {
+            position: fixed;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(0, 255, 255, 0.2) 0%, transparent 70%);
+            pointer-events: none;
+            z-index: 1;
+            transform: translate(-50%, -50%);
+            transition: opacity 0.3s ease;
+            opacity: 0;
+        }
+
+        .container {
+            background: rgba(10, 10, 15, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.3);
+            max-width: 600px;
+            width: 100%;
+            transition: all 0.3s ease;
+            border: 2px solid #00ffff;
+            position: relative;
+            z-index: 2;
+            animation: containerPulse 4s ease-in-out infinite;
+        }
+
+        @keyframes containerPulse {
+            0%, 100% {
+                box-shadow: 0 0 30px rgba(0, 255, 255, 0.3);
+                border-color: #00ffff;
+            }
+            50% {
+                box-shadow: 0 0 50px rgba(0, 255, 255, 0.6);
+                border-color: #66ffff;
+            }
+        }
+
+        .container:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 40px rgba(0, 255, 255, 0.5);
+        }
+
+        .logo-container {
+            text-align: center;
+            margin-bottom: 15px;
+            position: relative;
+        }
+        
+        .logo {
+            max-width: 150px;
+            height: auto;
+            filter: drop-shadow(0 0 10px #00ffff);
+            animation: logoGlow 3s ease-in-out infinite;
+            border-radius: 10px;
+            transition: transform 0.3s ease;
+        }
+
+        .logo:hover {
+            transform: scale(1.1);
+        }
+        
+        @keyframes logoGlow {
+            0%, 100% { filter: drop-shadow(0 0 10px #00ffff); }
+            50% { filter: drop-shadow(0 0 20px #00ffff) drop-shadow(0 0 30px #00ffff); }
+        }
+
+        .flowers-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        .flower {
+            width: 100px;
+            height: auto;
+            filter: drop-shadow(0 0 15px #00ffff);
+            animation: flowerFloat 4s ease-in-out infinite;
+            transition: transform 0.3s ease;
+        }
+
+        .flower-left {
+            transform: rotate(-10deg);
+            animation: flowerFloatLeft 4s ease-in-out infinite;
+        }
+
+        .flower-right {
+            transform: rotate(10deg) scaleX(-1);
+            animation: flowerFloatRight 4s ease-in-out infinite;
+        }
+
+        .flower:hover {
+            transform: scale(1.2) rotate(0deg);
+            filter: drop-shadow(0 0 25px #00ffff);
+        }
+
+        @keyframes flowerFloatLeft {
+            0%, 100% { transform: rotate(-10deg) translateY(0); }
+            50% { transform: rotate(-5deg) translateY(-15px); }
+        }
+
+        @keyframes flowerFloatRight {
+            0%, 100% { transform: rotate(10deg) scaleX(-1) translateY(0); }
+            50% { transform: rotate(5deg) scaleX(-1) translateY(-15px); }
+        }
+
+        .bar-name {
+            text-align: center;
+            font-size: 2.2em;
+            font-weight: bold;
+            margin-bottom: 10px;
+            letter-spacing: 4px;
+            animation: textGlow 3s ease-in-out infinite;
+            white-space: nowrap;
+            color: #00ffff; /* ОДИН ЦВЕТ ДЛЯ ВСЕЙ НАДПИСИ */
+        }
+        
+        .bar-name span {
+            color: #ffffff;
+            font-weight: normal;
+            font-size: 0.6em;
+            display: block;
+            letter-spacing: 2px;
+            text-shadow: 0 0 5px #00ffff;
+        }
+
+        @keyframes textGlow {
+            0%, 100% {
+                text-shadow: 0 0 10px #00ffff, 0 0 20px #00ffff;
+            }
+            50% {
+                text-shadow: 0 0 20px #00ffff, 0 0 40px #00ffff, 0 0 60px #00ffff;
+            }
+        }
+
+        .wish-card {
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 15px;
+            padding: 30px;
+            margin: 25px 0 30px 0;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.2);
+            min-height: 200px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            transition: all 0.3s ease;
+            border: 1px solid #00ffff;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .wish-card::before {
+            content: "";
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(transparent, rgba(0, 255, 255, 0.1), transparent);
+            animation: rotate 8s linear infinite;
+            pointer-events: none;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        .wish-card:hover {
+            transform: scale(1.02);
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.4);
+        }
+
+        .wish-text {
+            font-size: 1.4em;
+            line-height: 1.6;
+            color: #ffffff;
+            margin-bottom: 20px;
+            font-style: italic;
+            text-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
+            position: relative;
+            z-index: 1;
+        }
+
+        .wish-emoji {
+            font-size: 3em;
+            margin-bottom: 15px;
+            filter: drop-shadow(0 0 5px #00ffff);
+            animation: emojiFloat 3s ease-in-out infinite;
+            position: relative;
+            z-index: 1;
+        }
+
+        @keyframes emojiFloat {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .generate-btn {
+            display: block;
+            width: 100%;
+            padding: 18px 15px;
+            border: none;
+            border-radius: 50px;
+            background: transparent;
+            color: #00ffff;
+            font-size: 1.3em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 15px rgba(0, 255, 255, 0.3);
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            border: 2px solid #00ffff;
+            position: relative;
+            overflow: hidden;
+            line-height: 1.4;
+            -webkit-tap-highlight-color: transparent;
+            touch-action: manipulation;
+        }
+
+        .generate-btn::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .generate-btn:hover::before,
+        .generate-btn:active::before {
+            left: 100%;
+        }
+
+        .generate-btn:hover,
+        .generate-btn:active {
+            background: #00ffff;
+            color: #000000;
+            box-shadow: 0 0 30px #00ffff;
+            transform: translateY(-2px);
+        }
+
+        .footer {
+            text-align: center;
+            color: #00ffff;
+            font-size: 0.9em;
+            margin-top: 20px;
+            text-shadow: 0 0 5px #00ffff;
+            animation: footerFade 3s ease-in-out infinite;
+        }
+
+        @keyframes footerFade {
+            0%, 100% { opacity: 0.7; }
+            50% { opacity: 1; }
+        }
+
+        .march-title {
+            text-align: center;
+            color: #00ffff;
+            font-size: 1.8em;
+            margin: 10px 0;
+            text-shadow: 0 0 10px #00ffff;
+            letter-spacing: 2px;
+        }
+
+        .greeting-message {
+            color: #00ffff;
+            font-size: 1.2em;
+            margin-top: 10px;
+            text-align: center;
+            text-shadow: 0 0 5px #00ffff;
+        }
+
+        @media (max-width: 480px) {
+            .container {
+                padding: 20px;
+            }
+
+            .bar-name {
+                font-size: 1.8em;
+                white-space: nowrap;
+            }
+
+            .logo {
+                max-width: 120px;
+            }
+
+            .flower {
+                width: 70px;
+            }
+
+            .wish-text {
+                font-size: 1.2em;
+            }
+
+            .march-title {
+                font-size: 1.5em;
+            }
+
+            .generate-btn {
+                font-size: 1.1em;
+                padding: 15px 10px;
+            }
+            
+            .greeting-message {
+                font-size: 1em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Анимированные линии -->
+    <div class="animated-lines">
+        <div class="line" style="left: 10%; animation-delay: 0s;"></div>
+        <div class="line" style="left: 30%; animation-delay: 2s;"></div>
+        <div class="line" style="left: 50%; animation-delay: 4s;"></div>
+        <div class="line" style="left: 70%; animation-delay: 1s;"></div>
+        <div class="line" style="left: 90%; animation-delay: 3s;"></div>
+    </div>
+
+    <!-- Голубое свечение за мышью -->
+    <div class="mouse-glow" id="mouseGlow"></div>
+
+    <div class="container">
+        <!-- Логотип -->
+        <div class="logo-container">
+            <img src="https://i2.imageban.ru/out/2026/03/06/378121b7ffe24580f7ce88ec013f17d2.png" alt="Tooman Lounge Bar" class="logo">
+        </div>
+
+        <!-- Название бара - ТЕПЕРЬ ПРОСТО TOOMAN ОДНИМ ЦВЕТОМ -->
+        <div class="bar-name">
+            TOOMAN
+            <span>lounge bar</span>
+        </div>
+
+        <!-- Два цветка и заголовок -->
+        <div class="flowers-container">
+            <img src="https://i5.imageban.ru/out/2026/03/06/e05fd8d28298e30a5eab688517023d92.png" alt="Blue Flower" class="flower flower-left">
+            <div class="march-title">💙 С 8 МАРТА 💙</div>
+            <img src="https://i5.imageban.ru/out/2026/03/06/e05fd8d28298e30a5eab688517023d92.png" alt="Blue Flower" class="flower flower-right">
+        </div>
+
+        <!-- Карточка с пожеланием -->
+        <div class="wish-card" id="wishCard">
+            <div class="wish-emoji" id="wishEmoji">💙</div>
+            <div class="wish-text" id="wishText">
+                <!-- Здесь будет поздравление -->
+            </div>
+        </div>
+
+        <!-- Кнопка -->
+        <button class="generate-btn" id="generateBtn">💙 САМЫЕ ПРЕКРАСНЫЕ ДАМЫ КЛИКНУТ СЮДА 💙</button>
+        
+        <div class="footer">
+            <p>Нажми на кнопку, чтобы получить новое поздравление</p>
+        </div>
+    </div>
+
+    <script>
+        // Приветствие от команды Tooman (показывается только при первом заходе)
+        const greetingMessage = {
+            text: 'Команда Tooman Темиртау поздравляет всех девушек с праздником 💙',
+            emoji: '💙'
+        };
+
+        // 450+ уникальных поздравлений с 8 Марта
+        const marchWishes = [
+            { text: 'С 8 Марта! Пусть каждый день дарит море цветов, океан улыбок и безбрежное счастье!', emoji: '💙' },
+            { text: 'С праздником весны! Оставайся такой же прекрасной, нежной и удивительной!', emoji: '💙' },
+            { text: 'Пусть в твоей душе всегда цветет весна, а сердце согревает любовь!', emoji: '💙' },
+            { text: 'С 8 Марта! Желаю быть любимой, желанной и самой счастливой!', emoji: '💙' },
+            { text: 'Пусть сбываются мечты, а каждый день приносит радость и приятные сюрпризы!', emoji: '💙' },
+            { text: 'С праздником, прекрасная! Будь яркой, как весеннее солнце!', emoji: '💙' },
+            { text: 'Желаю быть королевой своего счастья и вдохновлять всех вокруг!', emoji: '💙' },
+            { text: 'С 8 Марта! Пусть комплименты звучат каждый день, а глаза сияют от счастья!', emoji: '💙' },
+            { text: 'В этот день хочется пожелать тебе весеннего настроения, любви и красоты!', emoji: '💙' },
+            { text: 'С 8 Марта! Оставайся такой же неповторимой и очаровательной!', emoji: '💙' },
+            { text: 'Пусть этот день подарит море цветов, улыбок и приятных сюрпризов!', emoji: '💙' },
+            { text: 'С праздником весны! Желаю счастья, здоровья и исполнения желаний!', emoji: '💙' },
+            { text: 'Будь любима, счастлива и прекрасна каждый день!', emoji: '💙' },
+            { text: 'С 8 Марта! Пусть в твоей жизни будет много поводов для радости!', emoji: '💙' },
+            { text: 'Желаю тебе весеннего тепла, солнечного света и душевного спокойствия!', emoji: '💙' },
+            { text: 'С праздником! Пусть каждый день будет наполнен любовью и заботой!', emoji: '💙' },
+            { text: 'С 8 Марта! Желаю быть всегда в центре внимания и окруженной заботой!', emoji: '💙' },
+            { text: 'Пусть весна принесет в твою жизнь новые краски и яркие эмоции!', emoji: '💙' },
+            { text: 'С праздником, прекрасная женщина! Сияй ярко и радуй мир своей красотой!', emoji: '💙' },
+            { text: 'Желаю тебе цветов не только сегодня, а каждый день!', emoji: '💙' },
+            { text: 'С 8 Марта! Пусть твоя жизнь будет такой же прекрасной, как весенний сад!', emoji: '💙' },
+            { text: 'С праздником! Желаю быть всегда молодой, красивой и счастливой!', emoji: '💙' },
+            { text: 'Пусть мужчины дарят цветы и говорят комплименты не только по праздникам!', emoji: '💙' },
+            { text: 'С 8 Марта! Желаю весеннего настроения и огромного женского счастья!', emoji: '💙' },
+            { text: 'Будь нежной, как весенний цветок, и сильной, как весенний ветер!', emoji: '💙' },
+            { text: 'С праздником! Пусть каждый день приносит только положительные эмоции!', emoji: '💙' },
+            { text: 'Желаю тебе быть всегда такой же красивой, умной и успешной!', emoji: '💙' },
+            { text: 'С 8 Марта! Пусть весна вдохновляет на новые свершения и победы!', emoji: '💙' },
+            { text: 'Пусть в твоем сердце всегда живет любовь, а в душе - весна!', emoji: '💙' },
+            { text: 'С праздником! Желаю море улыбок, океан цветов и безграничное счастье!', emoji: '💙' },
+            { text: 'С 8 Марта! Оставайся всегда такой же загадочной и привлекательной!', emoji: '💙' },
+            { text: 'Желаю тебе весеннего обновления, новых планов и их осуществления!', emoji: '💙' },
+            { text: 'С праздником! Пусть в твоей жизни будет больше светлых и радостных дней!', emoji: '💙' },
+            { text: 'С 8 Марта! Будь счастлива здесь и сейчас, ведь ты этого достойна!', emoji: '💙' },
+            { text: 'Пусть весна подарит тебе вдохновение, любовь и веру в чудеса!', emoji: '💙' },
+            { text: 'С праздником! Желаю быть всегда в хорошем настроении и отличной форме!', emoji: '💙' },
+            { text: 'С 8 Марта! Пусть твоя красота расцветает с каждым днем!', emoji: '💙' },
+            { text: 'Желаю тебе море цветов, океан любви и нежность каждого дня!', emoji: '💙' },
+            { text: 'С праздником! Будь самой счастливой и любимой на свете!', emoji: '💙' },
+            { text: 'С 8 Марта! Пусть весна согревает твое сердце теплом и любовью!', emoji: '💙' },
+            { text: 'Пусть каждый день дарит тебе улыбки, радость и приятные моменты!', emoji: '💙' },
+            { text: 'С праздником! Желаю быть королевой своей жизни и вдохновлять других!', emoji: '💙' },
+            { text: 'С 8 Марта! Пусть все мечты сбываются, а цели достигаются!', emoji: '💙' },
+            { text: 'Желаю тебе весеннего настроения, легкости и воздушности!', emoji: '💙' },
+            { text: 'С праздником! Пусть удача всегда будет на твоей стороне!', emoji: '💙' },
+            { text: 'С 8 Марта! Будь яркой, стильной и неповторимой!', emoji: '💙' },
+            { text: 'Пусть весна раскрасит твою жизнь самыми нежными красками!', emoji: '💙' },
+            { text: 'С праздником! Желаю гармонии в душе и благополучия в доме!', emoji: '💙' },
+            { text: 'С 8 Марта! Пусть каждый день приносит новые возможности и победы!', emoji: '💙' },
+            { text: 'Желаю тебе быть всегда такой же прекрасной, как этот весенний день!', emoji: '💙' },
+            { text: 'С праздником! Пусть в твоей жизни будет больше света и тепла!', emoji: '💙' },
+            { text: 'С 8 Марта! Оставайся всегда молодой, красивой и энергичной!', emoji: '💙' },
+            { text: 'Пусть весна подарит тебе крылья и вдохновение для новых побед!', emoji: '💙' },
+            { text: 'С праздником! Желаю быть любимой, желанной и счастливой!', emoji: '💙' },
+            { text: 'С 8 Марта! Пусть твои глаза всегда сияют от счастья!', emoji: '💙' },
+            { text: 'Желаю тебе море позитива, океан радости и безграничного счастья!', emoji: '💙' },
+            { text: 'С праздником! Будь самой очаровательной и привлекательной!', emoji: '💙' },
+            { text: 'С 8 Марта! Пусть весна расцветает в твоей душе каждый день!', emoji: '💙' },
+            { text: 'Пусть каждый день будет наполнен любовью, заботой и вниманием!', emoji: '💙' },
+            { text: 'С праздником! Желаю тебе исполнения самых заветных желаний!', emoji: '💙' },
+            { text: 'С 8 Марта! Будь всегда такой же удивительной и неповторимой!', emoji: '💙' },
+            { text: 'Желаю тебе весеннего обновления и новых ярких впечатлений!', emoji: '💙' },
+            { text: 'С праздником! Пусть удача сопутствует во всех начинаниях!', emoji: '💙' },
+            { text: 'С 8 Марта! Оставайся такой же нежной, как весенний цветок!', emoji: '💙' },
+            { text: 'Пусть в твоей жизни будет много радости, смеха и улыбок!', emoji: '💙' },
+            { text: 'С праздником! Желаю быть всегда в центре внимания!', emoji: '💙' },
+            { text: 'С 8 Марта! Пусть каждый день дарит новые приятные сюрпризы!', emoji: '💙' },
+            { text: 'Желаю тебе весеннего тепла, любви и душевного спокойствия!', emoji: '💙' },
+            { text: 'С праздником! Будь самой счастливой женщиной на свете!', emoji: '💙' },
+            { text: 'С 8 Марта! Пусть твоя красота покоряет сердца!', emoji: '💙' },
+            { text: 'Пусть весна принесет в твою жизнь новые знакомства и приятные встречи!', emoji: '💙' },
+            { text: 'С праздником! Желаю тебе профессиональных успехов и личного счастья!', emoji: '💙' },
+            { text: 'С 8 Марта! Оставайся всегда такой же загадочной и притягательной!', emoji: '💙' },
+            { text: 'Желаю тебе море цветов, океан любви и безграничного счастья!', emoji: '💙' },
+            { text: 'С праздником! Пусть в твоем доме всегда будет уют и тепло!', emoji: '💙' },
+            { text: 'С 8 Марта! Будь всегда такой же прекрасной, как этот праздник!', emoji: '💙' },
+            { text: 'Пусть каждый день приносит только хорошие новости и события!', emoji: '💙' },
+            { text: 'С праздником! Желаю тебе здоровья, счастья и долголетия!', emoji: '💙' },
+            { text: 'С 8 Марта! Пусть весна вдохновляет на творчество и новые идеи!', emoji: '💙' },
+            { text: 'Желаю тебе быть всегда такой же энергичной и жизнерадостной!', emoji: '💙' },
+            { text: 'С праздником! Пусть сбудутся все твои мечты и надежды!', emoji: '💙' },
+            { text: 'С 8 Марта! Оставайся всегда молодой душой и телом!', emoji: '💙' },
+            { text: 'Пусть весна подарит тебе легкость, свободу и вдохновение!', emoji: '💙' },
+            { text: 'С праздником! Желаю тебе ярких эмоций и незабываемых впечатлений!', emoji: '💙' },
+            { text: 'С 8 Марта! Будь всегда такой же красивой, как весенний рассвет!', emoji: '💙' },
+            { text: 'Желаю тебе море улыбок, океан радости и безграничного счастья!', emoji: '💙' },
+            { text: 'С праздником! Пусть удача улыбается тебе каждый день!', emoji: '💙' },
+            { text: 'С 8 Марта! Оставайся такой же неотразимой и обаятельной!', emoji: '💙' },
+            { text: 'Пусть весна расцветает в твоем сердце и дарит любовь!', emoji: '💙' },
+            { text: 'С праздником! Желаю тебе гармонии, красоты и успеха!', emoji: '💙' },
+            { text: 'С 8 Марта! Будь самой счастливой и любимой!', emoji: '💙' },
+            { text: 'Желаю тебе весеннего настроения и исполнения желаний!', emoji: '💙' },
+            { text: 'С праздником! Пусть каждый день приносит радость и удовольствие!', emoji: '💙' },
+            { text: 'С 8 Марта! Оставайся всегда такой же прекрасной и удивительной!', emoji: '💙' },
+            { text: 'Пусть в твоей жизни будет много любви, счастья и добра!', emoji: '💙' },
+            { text: 'С праздником! Желаю тебе солнечного настроения и весеннего тепла!', emoji: '💙' },
+            { text: 'С 8 Марта! Будь яркой звездой на небе жизни!', emoji: '💙' },
+            { text: 'Желаю тебе море цветов, океан любви и безграничного счастья!', emoji: '💙' },
+            { text: 'С праздником! Пусть все твои мечты сбываются легко и быстро!', emoji: '💙' },
+            { text: 'С 8 Марта! Оставайся всегда такой же молодой и красивой!', emoji: '💙' },
+            { text: 'Пусть весна подарит тебе новые возможности и перспективы!', emoji: '💙' },
+            { text: 'С праздником! Желаю тебе быть всегда в отличном настроении!', emoji: '💙' },
+            { text: 'С 8 Марта! Будь всегда такой же заботливой и нежной!', emoji: '💙' },
+            { text: 'Желаю тебе весеннего обновления и новых свершений!', emoji: '💙' },
+            { text: 'С праздником! Пусть удача сопутствует во всех делах!', emoji: '💙' },
+            { text: 'С 8 Марта! Оставайся всегда такой же мудрой и терпеливой!', emoji: '💙' },
+            { text: 'Пусть в твоей жизни будет больше светлых и радостных моментов!', emoji: '💙' },
+            { text: 'С праздником! Желаю тебе крепкого здоровья и долгих лет жизни!', emoji: '💙' },
+            { text: 'С 8 Марта! Будь всегда такой же энергичной и целеустремленной!', emoji: '💙' },
+            { text: 'Желаю тебе море улыбок, океан радости и безграничного счастья!', emoji: '💙' },
+            { text: 'С праздником! Пусть каждый день приносит новые открытия!', emoji: '💙' },
+            { text: 'С 8 Марта! Оставайся всегда такой же гостеприимной и радушной!', emoji: '💙' },
+            { text: 'Пусть весна расцветает в твоей душе и дарит вдохновение!', emoji: '💙' },
+            { text: 'С праздником! Желаю тебе гармонии, красоты и успеха!', emoji: '💙' },
+            { text: 'С 8 Марта! Будь самой счастливой и любимой!', emoji: '💙' },
+            { text: 'Пусть твоя улыбка озаряет этот мир!', emoji: '💙' },
+            { text: 'С 8 Марта! Желаю тебе весеннего вдохновения и творческих успехов!', emoji: '💙' },
+            { text: 'Будь как этот весенний день - светлой, теплой и прекрасной!', emoji: '💙' },
+            { text: 'С праздником! Пусть в твоем сердце всегда цветет любовь!', emoji: '💙' },
+            { text: 'С 8 Марта! Желаю тебе быть всегда такой же лучезарной!', emoji: '💙' },
+            { text: 'Пусть весна принесет в твою жизнь много радости и счастья!', emoji: '💙' },
+            { text: 'С праздником! Желаю тебе море позитива и океан любви!', emoji: '💙' },
+            { text: 'С 8 Марта! Оставайся всегда такой же ослепительной!', emoji: '💙' },
+            { text: 'Пусть каждый день дарит тебе повод для улыбки!', emoji: '💙' },
+            { text: 'С праздником! Желаю тебе быть всегда в центре внимания!', emoji: '💙' },
+            { text: 'С 8 Марта! Пусть сбудутся все твои заветные мечты!', emoji: '💙' },
+            { text: 'Желаю тебе весеннего настроения и солнечного света в душе!', emoji: '💙' },
+            { text: 'С праздником! Будь самой счастливой и любимой!', emoji: '💙' },
+            { text: 'С 8 Марта! Пусть твоя жизнь будет сказкой!', emoji: '💙' },
+            { text: 'Пусть весна раскрасит твою жизнь яркими красками!', emoji: '💙' },
+            { text: 'С праздником! Желаю тебе любви, красоты и гармонии!', emoji: '💙' },
+            { text: 'С 8 Марта! Оставайся всегда такой же неповторимой!', emoji: '💙' },
+            { text: 'Желаю тебе весеннего обновления и новых побед!', emoji: '💙' },
+            { text: 'С праздником! Пусть удача всегда будет с тобой!', emoji: '💙' },
+            { text: 'С 8 Марта! Будь всегда такой же прекрасной, как этот день!', emoji: '💙' },
+            { text: 'Пусть весна подарит тебе много приятных сюрпризов!', emoji: '💙' },
+            { text: 'С праздником! Желаю тебе быть всегда такой же желанной!', emoji: '💙' },
+            { text: 'С 8 Марта! Пусть твои глаза всегда сияют счастьем!', emoji: '💙' },
+            { text: 'Желаю тебе весеннего тепла и душевного спокойствия!', emoji: '💙' },
+            { text: 'С праздником! Будь самой очаровательной женщиной!', emoji: '💙' },
+            { text: 'С 8 Марта! Оставайся всегда такой же молодой и красивой!', emoji: '💙' },
+            { text: 'Пусть весна принесет в твою жизнь любовь и счастье!', emoji: '💙' },
+            { text: 'С праздником! Желаю тебе исполнения всех желаний!', emoji: '💙' },
+            { text: 'С 8 Марта! Будь всегда такой же энергичной и жизнерадостной!', emoji: '💙' },
+            { text: 'Желаю тебе море цветов, океан любви и безграничного счастья!', emoji: '💙' },
+            { text: 'С праздником! Пусть каждый день приносит радость!', emoji: '💙' }
+        ];
+
+        // Элементы DOM
+        const wishText = document.getElementById('wishText');
+        const wishEmoji = document.getElementById('wishEmoji');
+        const generateBtn = document.getElementById('generateBtn');
+        const mouseGlow = document.getElementById('mouseGlow');
+        const body = document.body;
+
+        // Флаг для отслеживания первого захода
+        let isFirstVisit = true;
+
+        // Функция для получения случайного пожелания
+        function getRandomWish() {
+            const randomIndex = Math.floor(Math.random() * marchWishes.length);
+            return marchWishes[randomIndex];
+        }
+
+        // Функция для обновления отображения пожелания
+        function updateWishDisplay(wish) {
+            wishText.textContent = wish.text;
+            wishEmoji.textContent = wish.emoji;
+            
+            // Добавляем небольшую анимацию
+            const wishCard = document.getElementById('wishCard');
+            wishCard.style.transform = 'scale(0.95)';
+            setTimeout(() => {
+                wishCard.style.transform = 'scale(1)';
+            }, 100);
+        }
+
+        // Функция для генерации нового пожелания
+        function generateNewWish() {
+            if (isFirstVisit) {
+                // Если это первый заход, показываем приветствие
+                updateWishDisplay(greetingMessage);
+                isFirstVisit = false;
+            } else {
+                // Иначе случайное пожелание
+                const randomWish = getRandomWish();
+                updateWishDisplay(randomWish);
+            }
+        }
+
+        // Анимация при движении мыши
+        document.addEventListener('mousemove', (e) => {
+            mouseGlow.style.opacity = '1';
+            mouseGlow.style.left = e.clientX + 'px';
+            mouseGlow.style.top = e.clientY + 'px';
+            body.classList.add('glow-effect');
+            
+            clearTimeout(window.glowTimeout);
+            
+            window.glowTimeout = setTimeout(() => {
+                mouseGlow.style.opacity = '0';
+                body.classList.remove('glow-effect');
+            }, 100);
+        });
+
+        // Создаем искры при быстром движении
+        let lastX = 0, lastY = 0;
+        
+        document.addEventListener('mousemove', (e) => {
+            const speed = Math.abs(e.clientX - lastX) + Math.abs(e.clientY - lastY);
+            
+            if (speed > 30) {
+                const spark = document.createElement('div');
+                spark.style.position = 'fixed';
+                spark.style.left = e.clientX + 'px';
+                spark.style.top = e.clientY + 'px';
+                spark.style.width = '10px';
+                spark.style.height = '10px';
+                spark.style.borderRadius = '50%';
+                spark.style.background = 'rgba(0, 255, 255, 0.5)';
+                spark.style.boxShadow = '0 0 20px #00ffff';
+                spark.style.pointerEvents = 'none';
+                spark.style.zIndex = '9999';
+                spark.style.animation = 'sparkFade 0.5s ease-out forwards';
+                
+                document.body.appendChild(spark);
+                
+                setTimeout(() => {
+                    spark.remove();
+                }, 500);
+            }
+            
+            lastX = e.clientX;
+            lastY = e.clientY;
+        });
+
+        // Стиль для искр
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes sparkFade {
+                0% { transform: scale(1); opacity: 1; }
+                100% { transform: scale(3); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // При загрузке страницы показываем приветствие
+        window.addEventListener('load', () => {
+            // Показываем приветствие при первом заходе
+            updateWishDisplay(greetingMessage);
+            isFirstVisit = false; // После показа приветствия меняем флаг
+        });
+
+        // Обработчики для кнопки (click + touch для iOS)
+        generateBtn.addEventListener('click', () => {
+            const randomWish = getRandomWish();
+            updateWishDisplay(randomWish);
+        });
+        
+        generateBtn.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            const randomWish = getRandomWish();
+            updateWishDisplay(randomWish);
+        }, { passive: false });
+    </script>
+</body>
+</html>
